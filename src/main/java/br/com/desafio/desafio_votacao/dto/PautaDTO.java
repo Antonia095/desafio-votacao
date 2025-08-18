@@ -1,17 +1,15 @@
 package br.com.desafio.desafio_votacao.dto;
 
-import br.com.desafio.desafio_votacao.enums.StatusPauta;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class PautaDTO {
 
+  @NotBlank
   private String titulo;
 
+  @NotBlank
   private String descricao;
-
-  private int quantidadeVotos;
-
-  private StatusPauta statusPauta;
 
 }

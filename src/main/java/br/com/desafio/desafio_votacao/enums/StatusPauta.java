@@ -3,5 +3,8 @@ package br.com.desafio.desafio_votacao.enums;
 public enum StatusPauta {
 
   APROVADA,
-  REPROVADA
+  CRIADA,
+  EM_VOTACAO,
+  REPROVADA,
+
 }
