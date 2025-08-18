@@ -1,18 +1,22 @@
 package br.com.desafio.desafio_votacao.dto;
 
-import br.com.desafio.desafio_votacao.enums.StatusSessaoVotacao;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
 public class SessaoVotacaoDTO {
 
+  @NotNull
   private Long idPauta;
 
+  @NotNull
   private LocalDateTime inicio;
 
+  @NotNull
   private LocalDateTime fim;
 
-  private StatusSessaoVotacao statusSessaoVotacao;
+  @NotNull
+  private Integer duracaoSessaoMinutos;
 
 }

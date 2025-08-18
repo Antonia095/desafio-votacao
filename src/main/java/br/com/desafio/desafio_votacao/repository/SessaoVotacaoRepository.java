@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SessaoVotacaoRepository extends JpaRepository<SessaoVotacao, Long> {
 
+  SessaoVotacao encontrarPautaPorId(Long idPauta);
+
 }

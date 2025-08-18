@@ -5,7 +5,6 @@ import static br.com.desafio.desafio_votacao.enums.StatusPauta.REPROVADA;
 
 import br.com.desafio.desafio_votacao.dto.PautaDTO;
 import br.com.desafio.desafio_votacao.dto.response.PautaResponseDTO;
-import br.com.desafio.desafio_votacao.enums.StatusPauta;
 import br.com.desafio.desafio_votacao.exception.BusinessException;
 import br.com.desafio.desafio_votacao.exception.EntityNotFoundException;
 import br.com.desafio.desafio_votacao.mapper.PautaMapper;
@@ -90,6 +89,4 @@ public class PautaService {
     return pautaRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("Pauta não encontrada!"));
   }
-
-
 }
