@@ -9,8 +9,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface PautaMapper {
 
-  @Mapping(target = "quantidadeVotos", expression = "java(0)")
-  @Mapping(target = "statusPauta", expression = "java(br.com.desafio.desafio_votacao.enums.StatusPauta.CRIADA)")
   Pauta toPauta(PautaDTO pautaDTO);
 
   PautaResponseDTO toPautaResponse(Pauta pauta);

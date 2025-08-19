@@ -6,11 +6,11 @@ import lombok.Data;
 @Data
 public class PautaResponseDTO {
 
+  private Long id;
+
   private String titulo;
 
   private String descricao;
-
-  private int quantidadeVotos;
 
   private StatusPauta statusPauta;
 
