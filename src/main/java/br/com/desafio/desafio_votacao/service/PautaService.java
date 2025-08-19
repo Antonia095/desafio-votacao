@@ -1,5 +1,6 @@
 package br.com.desafio.desafio_votacao.service;
 
+import static br.com.desafio.desafio_votacao.enums.StatusPauta.CRIADA;
 import static br.com.desafio.desafio_votacao.enums.StatusPauta.EM_VOTACAO;
 import static br.com.desafio.desafio_votacao.enums.StatusPauta.REPROVADA;
 
@@ -29,6 +30,7 @@ public class PautaService {
     log.info("Castrando pauta: {}", pautaDTO.getTitulo());
 
     var pauta = mapper.toPauta(pautaDTO);
+    pauta.setStatus(CRIADA);
 
     try {
       pautaRepository.save(pauta);
@@ -60,7 +62,7 @@ public class PautaService {
 
     var pauta = buscarPauta(id);
 
-    if (pauta.getStatusPauta() == EM_VOTACAO || pauta.getStatusPauta() == REPROVADA) {
+    if (pauta.getStatus() == EM_VOTACAO || pauta.getStatus() == REPROVADA) {
       throw new BusinessException(
           "Não é possível atualizar pauta que esteja em votação ou que foi reprovada"
       );
