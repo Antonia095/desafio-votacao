@@ -3,11 +3,10 @@ package br.com.desafio.desafio_votacao.service;
 import br.com.desafio.desafio_votacao.dto.SessaoVotacaoDTO;
 import br.com.desafio.desafio_votacao.dto.response.SessaoVotacaoResponseDTO;
 import br.com.desafio.desafio_votacao.exception.BusinessException;
+import br.com.desafio.desafio_votacao.exception.EntityNotFoundException;
 import br.com.desafio.desafio_votacao.mapper.SessaoVotacaoMapper;
-import br.com.desafio.desafio_votacao.model.Pauta;
-import br.com.desafio.desafio_votacao.repository.PautaRepository;
 import br.com.desafio.desafio_votacao.repository.SessaoVotacaoRepository;
-import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -21,19 +20,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class SessaoVotacaoService {
 
   private final SessaoVotacaoRepository sessaoRepository;
-  private final PautaRepository pautaRepository;
+  private final PautaService pautaService;
 
   private final SessaoVotacaoMapper mapper;
 
   @Transactional
   public SessaoVotacaoResponseDTO criarSessaoVotacao(SessaoVotacaoDTO sessaoVotacaoDTO) {
 
-    var pauta = pautaRepository
-        .findById(sessaoVotacaoDTO.getIdPauta())
-        .orElseThrow(() -> new EntityNotFoundException("Não foi encontrada pauta!"));
+    var pauta = pautaService.buscarPauta(sessaoVotacaoDTO.getIdPauta());
 
+    var inicioSessao = calcularInicioSessao(sessaoVotacaoDTO);
+    var fimSessao = calcularFimDaSessao(sessaoVotacaoDTO);
 
-    var sessaoVotacao =mapper.toSessaoVotacao(sessaoVotacaoDTO, pauta);
+    var sessaoVotacao =mapper.toSessaoVotacao(sessaoVotacaoDTO, pauta, inicioSessao, fimSessao);
 
     try {
       sessaoRepository.save(sessaoVotacao);
@@ -45,7 +44,6 @@ public class SessaoVotacaoService {
     }
 
     return mapper.toSessaoVotacaoResponse(sessaoVotacao);
-
   }
 
   public List<SessaoVotacaoResponseDTO> listarSessoesVotacao() {
@@ -75,4 +73,19 @@ public class SessaoVotacaoService {
     log.info("Sessão de votação excluida com sucesso!");
   }
 
+  private LocalDateTime calcularInicioSessao(SessaoVotacaoDTO dto) {
+
+    return dto.getInicio() != null ? dto.getInicio() : LocalDateTime.now();
+  }
+
+  private LocalDateTime calcularFimDaSessao(SessaoVotacaoDTO dto) {
+    if(dto.getFim() != null) {
+
+      return dto.getFim();
+    }
+
+    var inicioSessaoVotacao = calcularInicioSessao(dto);
+
+    return inicioSessaoVotacao.plusMinutes(1);
+  }
 }

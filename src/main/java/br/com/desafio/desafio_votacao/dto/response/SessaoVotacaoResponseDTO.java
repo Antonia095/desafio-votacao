@@ -8,6 +8,8 @@ import lombok.Data;
 @Data
 public class SessaoVotacaoResponseDTO {
 
+  private Long id;
+
   private PautaDTO pauta;
 
   private LocalDateTime inicio;

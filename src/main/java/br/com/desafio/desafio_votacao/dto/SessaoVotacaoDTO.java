@@ -10,13 +10,8 @@ public class SessaoVotacaoDTO {
   @NotNull
   private Long idPauta;
 
-  @NotNull
   private LocalDateTime inicio;
 
-  @NotNull
   private LocalDateTime fim;
-
-  @NotNull
-  private Integer duracaoSessaoMinutos;
 
 }
