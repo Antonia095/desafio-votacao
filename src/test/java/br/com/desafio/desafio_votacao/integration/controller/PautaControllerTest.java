@@ -125,7 +125,7 @@ class PautaControllerTest {
     when(pautaService.buscarPautaPorId(id))
         .thenThrow(new EntityNotFoundException("Pauta não encontrada"));
 
-    mockMvc.perform(get("/pautas/10"))
+    mockMvc.perform(get("/pautas/" + id))
         .andExpect(status().isNotFound());
 
     verify(pautaService).buscarPautaPorId(id);
