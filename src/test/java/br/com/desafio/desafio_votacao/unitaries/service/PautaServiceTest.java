@@ -4,6 +4,7 @@ import static br.com.desafio.desafio_votacao.enums.StatusPauta.CRIADA;
 import static br.com.desafio.desafio_votacao.enums.StatusPauta.EM_VOTACAO;
 import static br.com.desafio.desafio_votacao.enums.StatusPauta.REPROVADA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -181,5 +182,34 @@ class PautaServiceTest {
     when(pautaRepository.findById(id)).thenReturn(Optional.empty());
 
     assertThrows(EntityNotFoundException.class, () -> pautaService.deletarPauta(id));
+  }
+
+  @Test
+  @DisplayName("Deve buscar pauta com sucesso")
+  void deveBuscarPautaComSucesso() {
+
+    when(pautaRepository.findById(1L)).thenReturn(Optional.of(pauta));
+
+    var pauta = pautaService.buscarPauta(1L);
+
+    assertNotNull(pauta);
+    assertEquals(1L, pauta.getId());
+    assertEquals("Título", pauta.getTitulo());
+
+    verify(pautaRepository).findById(1L);
+  }
+
+  @Test
+  @DisplayName("Deve lançar EntityNotFoundException ao buscar Pauta e não encontrar")
+  void deveLancarEntityNotFoundExceptionBuscarPauta() {
+
+    when(pautaRepository.findById(1L)).thenReturn(Optional.empty());
+
+    var exception = assertThrows(EntityNotFoundException.class,
+        () -> pautaService.buscarPauta(1L));
+
+    assertEquals("Pauta não encontrada!", exception.getMessage());
+
+    verify(pautaRepository).findById(1L);
   }
 }

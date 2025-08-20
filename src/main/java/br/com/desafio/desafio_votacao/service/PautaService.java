@@ -85,8 +85,7 @@ public class PautaService {
     log.info("Pauta deletada com sucesso!");
   }
 
-
-  private Pauta buscarPauta(Long id) {
+  public Pauta buscarPauta(Long id) {
 
     return pautaRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("Pauta não encontrada!"));
