@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VotoRepository extends JpaRepository<Voto, Long> {
 
-  boolean validarVotacaoUnicaParaUsuario(Long idUsuario, Long idSessaoVotacao);
+  boolean existsByIdUsuarioAndSessaoVotacaoId(Long idUsuario, Long idSessaoVotacao);
 
-  List<Voto> buscarVotosPorSessao(Long idSessaoVotacao);
+  List<Voto> findBySessaoVotacaoId(Long idSessaoVotacao);
 }

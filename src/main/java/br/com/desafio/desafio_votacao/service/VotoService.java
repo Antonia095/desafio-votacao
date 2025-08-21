@@ -51,7 +51,7 @@ public class VotoService {
 
     validarSessaoExiste(idSessaoVotacao);
 
-    var votos = votoRepository.buscarVotosPorSessao(idSessaoVotacao);
+    var votos = votoRepository.findBySessaoVotacaoId(idSessaoVotacao);
 
     return votos.stream()
         .map(mapper::toVotoResponse)
@@ -77,7 +77,7 @@ public class VotoService {
 
   private void validarVotoUnico(Long idUsuario, Long idSessaoVotacao) {
 
-    if (votoRepository.validarVotacaoUnicaParaUsuario(idUsuario, idSessaoVotacao)) {
+    if (votoRepository.existsByIdUsuarioAndSessaoVotacaoId(idUsuario, idSessaoVotacao)) {
       throw new BusinessException("Usuário já votou nesta sessão");
     }
   }

@@ -85,7 +85,7 @@ class VotoServiceTest {
   void deveRegistrarVotoComSucesso() {
 
     when(sessaoVotacaoRepository.findById(1L)).thenReturn(Optional.of(sessaoVotacao));
-    when(votoRepository.validarVotacaoUnicaParaUsuario(1L, 1L)).thenReturn(false);
+    when(votoRepository.existsByIdUsuarioAndSessaoVotacaoId(1L, 1L)).thenReturn(false);
     when(mapper.toVoto(votoDTO, sessaoVotacao)).thenReturn(voto);
     when(votoRepository.save(voto)).thenReturn(voto);
     when(mapper.toVotoResponse(voto)).thenReturn(votoResponseDTO);
@@ -98,7 +98,7 @@ class VotoServiceTest {
     assertEquals(SIM, resultado.getTipoVoto());
 
     verify(sessaoVotacaoRepository).findById(1L);
-    verify(votoRepository).validarVotacaoUnicaParaUsuario(1L, 1L);
+    verify(votoRepository).existsByIdUsuarioAndSessaoVotacaoId(1L, 1L);
     verify(mapper).toVoto(votoDTO, sessaoVotacao);
     verify(votoRepository).save(voto);
     verify(mapper).toVotoResponse(voto);
@@ -109,7 +109,7 @@ class VotoServiceTest {
   void deveLancarBusinessExceptionErroAoSalvarVoto() {
 
     when(sessaoVotacaoRepository.findById(1L)).thenReturn(Optional.of(sessaoVotacao));
-    when(votoRepository.validarVotacaoUnicaParaUsuario(1L, 1L)).thenReturn(false);
+    when(votoRepository.existsByIdUsuarioAndSessaoVotacaoId(1L, 1L)).thenReturn(false);
     when(mapper.toVoto(votoDTO, sessaoVotacao)).thenReturn(voto);
     when(votoRepository.save(voto)).thenThrow(new RuntimeException("Erro de banco"));
 
@@ -134,7 +134,7 @@ class VotoServiceTest {
     assertEquals("Sessão de votação não encontrada!", exception.getMessage());
 
     verify(sessaoVotacaoRepository).findById(1L);
-    verify(votoRepository, never()).validarVotacaoUnicaParaUsuario(any(), any());
+    verify(votoRepository, never()).existsByIdUsuarioAndSessaoVotacaoId(any(), any());
     verify(votoRepository, never()).save(any());
   }
 
@@ -152,7 +152,7 @@ class VotoServiceTest {
         exception.getMessage());
 
     verify(sessaoVotacaoRepository).findById(1L);
-    verify(votoRepository, never()).validarVotacaoUnicaParaUsuario(any(), any());
+    verify(votoRepository, never()).existsByIdUsuarioAndSessaoVotacaoId(any(), any());
   }
 
   @Test
@@ -169,7 +169,7 @@ class VotoServiceTest {
     assertEquals("Período de votação não permitido", exception.getMessage());
 
     verify(sessaoVotacaoRepository).findById(1L);
-    verify(votoRepository, never()).validarVotacaoUnicaParaUsuario(any(), any());
+    verify(votoRepository, never()).existsByIdUsuarioAndSessaoVotacaoId(any(), any());
   }
 
   @Test
@@ -177,7 +177,7 @@ class VotoServiceTest {
   void deveLancarBusinessExceptionQuandoUsuarioJaVotou() {
 
     when(sessaoVotacaoRepository.findById(1L)).thenReturn(Optional.of(sessaoVotacao));
-    when(votoRepository.validarVotacaoUnicaParaUsuario(1L, 1L)).thenReturn(true);
+    when(votoRepository.existsByIdUsuarioAndSessaoVotacaoId(1L, 1L)).thenReturn(true);
 
     var exception = assertThrows(BusinessException.class,
         () -> votoService.registrarVoto(votoDTO));
@@ -185,7 +185,7 @@ class VotoServiceTest {
     assertEquals("Usuário já votou nesta sessão", exception.getMessage());
 
     verify(sessaoVotacaoRepository).findById(1L);
-    verify(votoRepository).validarVotacaoUnicaParaUsuario(1L, 1L);
+    verify(votoRepository).existsByIdUsuarioAndSessaoVotacaoId(1L, 1L);
     verify(votoRepository, never()).save(any());
   }
 
@@ -195,7 +195,7 @@ class VotoServiceTest {
 
     var votos = List.of(voto);
     when(sessaoVotacaoRepository.findById(1L)).thenReturn(Optional.of(sessaoVotacao));
-    when(votoRepository.buscarVotosPorSessao(1L)).thenReturn(votos);
+    when(votoRepository.findBySessaoVotacaoId(1L)).thenReturn(votos);
     when(mapper.toVotoResponse(voto)).thenReturn(votoResponseDTO);
 
     var resultado = votoService.listarVotosPorSessao(1L);
@@ -205,7 +205,7 @@ class VotoServiceTest {
     assertEquals(1L, resultado.get(0).getIdVoto());
 
     verify(sessaoVotacaoRepository).findById(1L);
-    verify(votoRepository).buscarVotosPorSessao(1L);
+    verify(votoRepository).findBySessaoVotacaoId(1L);
     verify(mapper).toVotoResponse(voto);
   }
 
@@ -214,7 +214,7 @@ class VotoServiceTest {
   void deveRetornarListaVaziaQuandoNaoHaVotos() {
 
     when(sessaoVotacaoRepository.findById(1L)).thenReturn(Optional.of(sessaoVotacao));
-    when(votoRepository.buscarVotosPorSessao(1L)).thenReturn(Collections.emptyList());
+    when(votoRepository.findBySessaoVotacaoId(1L)).thenReturn(Collections.emptyList());
 
     var resultado = votoService.listarVotosPorSessao(1L);
 
@@ -222,7 +222,7 @@ class VotoServiceTest {
     assertTrue(resultado.isEmpty());
 
     verify(sessaoVotacaoRepository).findById(1L);
-    verify(votoRepository).buscarVotosPorSessao(1L);
+    verify(votoRepository).findBySessaoVotacaoId(1L);
     verify(mapper, never()).toVotoResponse(any());
   }
 
