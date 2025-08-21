@@ -77,7 +77,6 @@ class SessaoVotacaoControllerTest {
   @DisplayName("Deve criar sessão de votação com duração padrão quando não informada")
   void deveCriarSessaoVotacaoComDuracaoPadrao() throws Exception {
 
-
     var sessaoVotacaoDto = new SessaoVotacaoDTO();
     sessaoVotacaoDto.setIdPauta(1L);
 

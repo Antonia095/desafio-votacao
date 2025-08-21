@@ -13,10 +13,8 @@ public interface VotoMapper {
   @Mapping(target = "sessaoVotacao", source = "sessaoVotacao")
   Voto toVoto(VotoDTO votoDTO, SessaoVotacao sessaoVotacao);
 
-  VotoResponseDTO toVotoResponse(Voto voto);
-
   @Mapping(target = "idVoto", source = "id")
   @Mapping(target = "idSessaoVotacao", source = "sessaoVotacao.id")
-  VotoResponseDTO toVotoResponseDetalhado(Voto voto);
+  VotoResponseDTO toVotoResponse(Voto voto);
 
 }
